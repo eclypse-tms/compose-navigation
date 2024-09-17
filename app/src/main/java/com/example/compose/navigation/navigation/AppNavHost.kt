@@ -18,7 +18,9 @@ fun AppNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: AppDestinations) {
 
-    NavHost(navController = navController, startDestination = startDestination) {
+    NavHost(modifier = modifier,
+        navController = navController,
+        startDestination = startDestination) {
 
 
         composable<AppDestinations.MovieList> { navBackStackEntry ->
