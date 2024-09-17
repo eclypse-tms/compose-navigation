@@ -7,10 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.compose.navigation.ui.MovieDetailScreen
-import com.example.compose.navigation.ui.MovieDetailViewModel
-import com.example.compose.navigation.ui.MovieListScreen
-import com.example.compose.navigation.ui.MovieListViewModel
+import com.example.compose.navigation.ui.detail.MovieDetailScreen
+import com.example.compose.navigation.ui.detail.MovieDetailViewModel
+import com.example.compose.navigation.ui.list.MovieListScreen
+import com.example.compose.navigation.ui.list.MovieListViewModel
 
 @Composable
 fun AppNavHost(

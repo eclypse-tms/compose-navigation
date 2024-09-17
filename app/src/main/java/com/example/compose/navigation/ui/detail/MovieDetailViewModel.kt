@@ -1,4 +1,4 @@
-package com.example.compose.navigation.ui
+package com.example.compose.navigation.ui.detail
 
 import androidx.lifecycle.ViewModel
 
