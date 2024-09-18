@@ -7,10 +7,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.compose.navigation.ui.actor.AddActorScreen
 import com.example.compose.navigation.ui.detail.MovieDetailScreen
 import com.example.compose.navigation.ui.detail.MovieDetailViewModel
 import com.example.compose.navigation.ui.list.MovieListScreen
 import com.example.compose.navigation.ui.list.MovieListViewModel
+import com.example.compose.navigation.ui.producer.AddProducerScreen
 
 @Composable
 fun AppNavHost(
@@ -36,7 +38,7 @@ fun AppNavHost(
             )
         }
 
-        // region AddNewOrEditNote
+        // region MovieDetail
         composable<AppDestinations.MovieDetail> { navBackStackEntry ->
             val movieDetailViewModel = hiltViewModel<MovieDetailViewModel>()
 
@@ -58,7 +60,36 @@ fun AppNavHost(
             MovieDetailScreen(
                 viewModel = movieDetailViewModel,
                 onDismissScreen = { navController.popBackStack() },
+                onAddNewProducer = {
+                    navController.navigate(AppDestinations.ProducerDetail)
+                },
+                onAddNewActor = {
+                    navController.navigate(AppDestinations.ActorDetail)
+                }
             )
         }
+        // endregion
+
+        // region ActorDetail
+        composable<AppDestinations.ActorDetail> { navBackStackEntry ->
+            val movieDetailViewModel = hiltViewModel<MovieDetailViewModel>()
+
+            AddActorScreen(
+                viewModel = movieDetailViewModel,
+                onDismissScreen = { navController.popBackStack() },
+            )
+        }
+        // endregion
+
+        // region ProducerDetail
+        composable<AppDestinations.ProducerDetail> { navBackStackEntry ->
+            val movieDetailViewModel = hiltViewModel<MovieDetailViewModel>()
+
+            AddProducerScreen(
+                viewModel = movieDetailViewModel,
+                onDismissScreen = { navController.popBackStack() },
+            )
+        }
+        // endregion
     }
 }

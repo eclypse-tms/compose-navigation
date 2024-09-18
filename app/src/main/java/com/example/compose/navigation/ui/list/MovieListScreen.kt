@@ -18,7 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.compose.navigation.ui.theme.ImpalerTheme
+import com.example.compose.navigation.ui.theme.WayfinderTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +65,7 @@ fun PreviewMovieListScreen() {
 
     viewModel.onReceive(Intent.InitialState(viewState))
 
-    ImpalerTheme {
+    WayfinderTheme {
         MovieListScreen(
             viewModel = viewModel,
             onMovieSelected = {},

@@ -9,4 +9,10 @@ sealed class AppDestinations {
 
     @Serializable
     data class MovieDetail(val movieId: String? = null) : AppDestinations()
+
+    @Serializable
+    data object ActorDetail: AppDestinations()
+
+    @Serializable
+    data object ProducerDetail: AppDestinations()
 }

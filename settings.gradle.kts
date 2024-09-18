@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Impale"
+rootProject.name = "Wayfinder"
 include(":app")

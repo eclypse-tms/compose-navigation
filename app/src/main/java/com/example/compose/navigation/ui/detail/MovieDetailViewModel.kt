@@ -21,6 +21,12 @@ class MovieDetailViewModel: ViewModel() {
             is Intent.InsertNewActor -> {
 
             }
+
+            is Intent.SetProducer -> {
+                val currentState = _movieListViewState.value
+                val newProducerViewState = currentState.addNewProducerViewState.copy(isExecutive = intent.isExecutive)
+                _movieListViewState.value = currentState.copy(addNewProducerViewState = newProducerViewState)
+            }
         }
     }
 }
