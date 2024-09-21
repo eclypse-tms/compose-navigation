@@ -4,8 +4,9 @@ import com.example.compose.navigation.ui.actor.Actor
 import com.example.compose.navigation.ui.detail.MovieGenre
 import com.example.compose.navigation.ui.director.Director
 import com.example.compose.navigation.ui.producer.Producer
+import javax.inject.Inject
 
-object MovieGenerator {
+class MovieGenerator @Inject constructor() {
 
     fun generateTop3MovieListFromImdb(): List<Movie> {
         return listOf(

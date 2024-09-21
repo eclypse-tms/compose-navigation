@@ -59,11 +59,11 @@ fun MovieListScreen(viewModel: MovieListViewModel,
 @Composable
 fun PreviewMovieListScreen() {
 
-    val viewState = MovieListViewState(visibleMovies = MovieGenerator.generateTop3MovieListFromImdb())
+    val movieGenerator = MovieGenerator()
+    val movieListProvider = MovieListProviderImpl(movieGenerator)
+    val viewModel = MovieListViewModel(movieListProvider)
 
-    val viewModel = MovieListViewModel()
-
-    viewModel.onReceive(Intent.InitialState(viewState))
+    viewModel.onReceive(Intent.InitialState(movieGenerator.generateTop3MovieListFromImdb()))
 
     WayfinderTheme {
         MovieListScreen(

@@ -23,7 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import com.example.compose.navigation.ui.detail.MovieDetailViewModel
+import com.example.compose.navigation.ui.list.MovieGenerator
+import com.example.compose.navigation.ui.list.MovieListProviderImpl
 import com.example.compose.navigation.ui.theme.WayfinderTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,7 +106,10 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
 @Preview
 @Composable
 fun PreviewAddActorScreen() {
-    val previewViewModel = MovieDetailViewModel()
+    val previewViewModel = MovieDetailViewModel(
+        savedStateHandle = SavedStateHandle(),
+        movieListProvider = MovieListProviderImpl(MovieGenerator())
+    )
     WayfinderTheme {
         AddActorScreen(viewModel = previewViewModel,
             onDismissScreen = {})

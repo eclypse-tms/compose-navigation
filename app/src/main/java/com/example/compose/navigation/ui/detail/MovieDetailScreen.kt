@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,8 +51,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.SavedStateHandle
+import com.example.compose.navigation.ui.actor.Actor
 import com.example.compose.navigation.ui.director.Director
+import com.example.compose.navigation.ui.list.Movie
+import com.example.compose.navigation.ui.list.MovieGenerator
+import com.example.compose.navigation.ui.list.MovieListProviderImpl
+import com.example.compose.navigation.ui.producer.Producer
 import com.example.compose.navigation.ui.theme.NavyBlue
 import com.example.compose.navigation.ui.theme.WayfinderTheme
 
@@ -65,9 +69,6 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
                       onAddNewProducer: () -> Unit) {
 
     val movieDetails: MovieDetailViewState by viewModel.movieDetailViewStateFlow.collectAsState()
-    var expanded by remember { mutableStateOf(false) }
-    var currentSelectedGenre by remember { mutableStateOf(movieDetails.genre) }
-
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -82,254 +83,286 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
     }) { innerPadding ->
         Column(modifier = Modifier
             .padding(innerPadding)
-            .consumeWindowInsets(innerPadding)) {
+            .consumeWindowInsets(innerPadding)
+        ) {
 
-            Column(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                // Title
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    placeholder = {
-                        Text(text = "Title")
-                    },
-                    value = movieDetails.title,
-                    onValueChange = {
+            MovieDetailsContent(movieDetails = movieDetails,
+                onDismissScreen = onDismissScreen,
+                onAddNewActor = onAddNewActor,
+                onAddNewProducer = onAddNewProducer,
+                modifier = Modifier.weight(1f))
 
-                    })
+            // Spacer(modifier = Modifier.height(32.dp))
 
-                // release date
-                val movieReleaseDate: String = movieDetails.yearReleased ?: ""
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    placeholder = {
-                        Text(text = "Release Date")
-                    },
-                    value = movieReleaseDate,
-                    onValueChange = {
-
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
-                    )
-                )
-
-                // genre selection
-                ExposedDropdownMenuBox(
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    expanded = expanded,
-                    onExpandedChange = { expanded = it },
-                ) {
-                    TextField(
-                        // The `menuAnchor` modifier must be passed to the text field to handle
-                        // expanding/collapsing the menu on click. A read-only text field has
-                        // the anchor type `PrimaryNotEditable`.
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                            .fillMaxWidth(),
-                        value = currentSelectedGenre,
-                        onValueChange = {},
-                        readOnly = true,
-                        singleLine = true,
-                        placeholder = {
-                            Text("Genre")
-                        },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                    )
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                    ) {
-                        MovieGenre.entries.forEach { eachMovieGenre ->
-                            DropdownMenuItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = {
-                                    Text(
-                                        eachMovieGenre.name,
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                },
-                                onClick = {
-                                    currentSelectedGenre = eachMovieGenre.name
-                                    expanded = false
-                                },
-                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                            )
-                        }
-                    }
-                }
-
-                // director
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Director")
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                ) {
-                    TextField(
-                        modifier = Modifier
-                            .weight(50f),
-                        placeholder = {
-                            Text(text = "First Name")
-                        },
-                        value = movieDetails.director.firstName,
-                        onValueChange = {
-
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    TextField(
-                        modifier = Modifier
-                            .weight(50f),
-                        placeholder = {
-                            Text(text = "Last Name")
-                        },
-                        value = movieDetails.director.lastName,
-                        onValueChange = {
-
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text
-                        )
-                    )
-                }
-
-                // actors
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Actors")
-                LazyColumn(
-                    modifier = Modifier.heightIn(0.dp, 3000.dp),
-                    userScrollEnabled = false
-                ) {
-                    itemsIndexed(movieDetails.actors) { _, eachActor ->
-                        ListItem(headlineContent = {
-                            Text(text = eachActor.displayName())
-                        })
-                        HorizontalDivider()
-                    }
-                }
-
-                ListItem(modifier = Modifier.clickable {
-                    onAddNewActor()
+            SaveAndCancelSection(
+                onSaveMovie = {
+                    viewModel.onReceive(Intent.SaveMovie)
                 },
-                    headlineContent = {
-                        Row {
-                            Icon(Icons.Filled.Add, null)
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "Add Actor")
-                        }
+                onDismissScreen = onDismissScreen
+            )
 
-                    },
-                    trailingContent = {
-                        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
-                    })
+        }
+    }
+}
 
-                // producers
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Producers")
-                LazyColumn(
-                    modifier = Modifier.heightIn(0.dp, 3000.dp),
-                    userScrollEnabled = false
-                ) {
-                    itemsIndexed(movieDetails.producers) { _, eachProducer ->
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MovieDetailsContent(movieDetails: MovieDetailViewState,
+                        modifier: Modifier = Modifier,
+                        onDismissScreen: () -> Unit,
+                        onAddNewActor: () -> Unit,
+                        onAddNewProducer: () -> Unit) {
 
-                        ListItem(headlineContent = {
-                            Text(text = eachProducer.displayName())
-                        })
-                        HorizontalDivider()
-                    }
-                }
+    var expanded by remember { mutableStateOf(false) }
+    var currentSelectedGenre by remember { mutableStateOf(movieDetails.genre) }
 
-                ListItem(modifier = Modifier.clickable {
-                    onAddNewProducer()
-                },
-                    headlineContent = {
-                        Row {
-                            Icon(Icons.Filled.Add, null)
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "Add Producer")
-                        }
-                    },
-                    trailingContent = {
-                        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
-                    })
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-
-            Row(modifier = Modifier
+    Column(
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .then(modifier)) {
+        // Title
+        TextField(
+            modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically) {
+                .padding(bottom = 8.dp),
+            placeholder = {
+                Text(text = "Title")
+            },
+            value = movieDetails.title,
+            onValueChange = {
 
-                Button(modifier = Modifier.widthIn(min = 150.dp),
-                    colors = ButtonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = NavyBlue,
-                        disabledContentColor = Color.Gray,
-                        disabledContainerColor = Color.Transparent,
-                    ),
-                    onClick = {
-                        onDismissScreen()
-                    }) {
-                    Text(text = "Cancel")
-                }
+            })
 
-                Button(modifier = Modifier.widthIn(min = 150.dp),
-                    onClick = {
+        // release date
+        val movieReleaseDate: String = movieDetails.yearReleased ?: ""
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            placeholder = {
+                Text(text = "Release Date")
+            },
+            value = movieReleaseDate,
+            onValueChange = {
 
-                    }) {
-                    Text(text = "Save")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            )
+        )
+
+        // genre selection
+        ExposedDropdownMenuBox(
+            modifier = Modifier.padding(bottom = 8.dp),
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+        ) {
+            TextField(
+                // The `menuAnchor` modifier must be passed to the text field to handle
+                // expanding/collapsing the menu on click. A read-only text field has
+                // the anchor type `PrimaryNotEditable`.
+                modifier = Modifier
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                    .fillMaxWidth(),
+                value = currentSelectedGenre,
+                onValueChange = {},
+                readOnly = true,
+                singleLine = true,
+                placeholder = {
+                    Text("Genre")
+                },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+            ) {
+                MovieGenre.entries.forEach { eachMovieGenre ->
+                    DropdownMenuItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = {
+                            Text(
+                                eachMovieGenre.name,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        },
+                        onClick = {
+                            currentSelectedGenre = eachMovieGenre.name
+                            expanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
                 }
             }
         }
-    }
 
+        // director
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(text = "Director")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+        ) {
+            TextField(
+                modifier = Modifier
+                    .weight(50f),
+                placeholder = {
+                    Text(text = "First Name")
+                },
+                value = movieDetails.director.firstName,
+                onValueChange = {
+
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                )
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextField(
+                modifier = Modifier
+                    .weight(50f),
+                placeholder = {
+                    Text(text = "Last Name")
+                },
+                value = movieDetails.director.lastName,
+                onValueChange = {
+
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                )
+            )
+        }
+
+        // actors
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(text = "Actors")
+        LazyColumn(
+            modifier = Modifier.heightIn(0.dp, 3000.dp),
+            userScrollEnabled = false
+        ) {
+            itemsIndexed(movieDetails.actors) { _, eachActor ->
+                ListItem(headlineContent = {
+                    Text(text = eachActor.displayName())
+                })
+                HorizontalDivider()
+            }
+        }
+
+        ListItem(modifier = Modifier.clickable {
+            onAddNewActor()
+        },
+            headlineContent = {
+                Row {
+                    Icon(Icons.Filled.Add, null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = "Add Actor")
+                }
+
+            },
+            trailingContent = {
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
+            })
+
+        // producers
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(text = "Producers")
+        LazyColumn(
+            modifier = Modifier.heightIn(0.dp, 3000.dp),
+            userScrollEnabled = false
+        ) {
+            itemsIndexed(movieDetails.producers) { _, eachProducer ->
+
+                ListItem(headlineContent = {
+                    Text(text = eachProducer.displayName())
+                })
+                HorizontalDivider()
+            }
+        }
+
+        ListItem(modifier = Modifier.clickable {
+            onAddNewProducer()
+        },
+            headlineContent = {
+                Row {
+                    Icon(Icons.Filled.Add, null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = "Add Producer")
+                }
+            },
+            trailingContent = {
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
+            })
+    }
 }
 
-@Preview(heightDp = 800)
+@Composable
+fun SaveAndCancelSection(onSaveMovie: () -> Unit,
+    onDismissScreen: () -> Unit) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .background(MaterialTheme.colorScheme.background)
+        .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically) {
+
+        Button(modifier = Modifier.widthIn(min = 150.dp),
+            colors = ButtonColors(
+                containerColor = Color.Transparent,
+                contentColor = NavyBlue,
+                disabledContentColor = Color.Gray,
+                disabledContainerColor = Color.Transparent,
+            ),
+            onClick = {
+                onDismissScreen()
+            }) {
+            Text(text = "Cancel")
+        }
+
+        Button(modifier = Modifier.widthIn(min = 150.dp),
+            onClick = {
+                onSaveMovie()
+            }) {
+            Text(text = "Save")
+        }
+    }
+}
+
+@Preview(heightDp = 1200)
 @Composable
 fun MovieDetailScreenPreview() {
-    val previewMovieDetailViewState = MovieDetailViewState(
+    val previewMovieDetailViewState = Movie(
+        id = "1",
         title = "The Godfather",
-        yearReleased = "1972",
-        genre = "Crime",
+        yearReleased = 1972,
+        genre = MovieGenre.Crime,
         director = Director(firstName = "Francis", lastName = "Ford Coppola"),
         actors = listOf(
-            //Actor(firstName = "Marlon", lastName = "Brando", dob = 1954),
-            //Actor(firstName = "Al", lastName = "Pacino", dob = 1948)
+            Actor(firstName = "Marlon", lastName = "Brando", dob = 1954),
+            Actor(firstName = "Al", lastName = "Pacino", dob = 1948)
         ),
         producers = listOf(
-            //Producer(firstName = "Albert", lastName = "Ruddy"),
-            //Producer(firstName = "Robert", lastName = "Evans"),
-            //Producer(firstName = "Bill", lastName = "Norman"),
+            Producer(firstName = "Albert", lastName = "Ruddy"),
+            Producer(firstName = "Robert", lastName = "Evans"),
+            Producer(firstName = "Bill", lastName = "Norman"),
         )
     )
 
-    val viewModel = MovieDetailViewModel()
+    val previewViewModel = MovieDetailViewModel(
+        savedStateHandle = SavedStateHandle(),
+        movieListProvider = MovieListProviderImpl(MovieGenerator())
+    )
 
-    viewModel.onReceive(Intent.InitialState(previewMovieDetailViewState))
+    previewViewModel.onReceive(Intent.InitialState(previewMovieDetailViewState))
 
     WayfinderTheme {
-        MovieDetailScreen(viewModel = viewModel,
+        MovieDetailScreen(viewModel = previewViewModel,
             onDismissScreen = {},
             onAddNewProducer = {},
             onAddNewActor = {})
