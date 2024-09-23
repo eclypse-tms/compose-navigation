@@ -29,6 +29,7 @@ import com.example.compose.navigation.ui.detail.MovieDetailViewModel
 import com.example.compose.navigation.ui.list.MovieGenerator
 import com.example.compose.navigation.ui.list.MovieListProviderImpl
 import com.example.compose.navigation.ui.theme.WayfinderTheme
+import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,6 +108,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
 @Composable
 fun PreviewAddActorScreen() {
     val previewViewModel = MovieDetailViewModel(
+        couroutineContext = Dispatchers.Main,
         savedStateHandle = SavedStateHandle(),
         movieListProvider = MovieListProviderImpl(MovieGenerator())
     )

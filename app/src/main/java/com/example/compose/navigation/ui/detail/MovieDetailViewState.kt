@@ -20,7 +20,14 @@ data class AddNewActorViewState(
     val firstName: String = "",
     val lastName: String = "",
     val dob: String = ""
-)
+) {
+    fun toActor(): Actor {
+        return Actor(firstName = firstName,
+            lastName = lastName,
+            dob = dob.toInt()
+        )
+    }
+}
 
 data class AddNewProducerViewState(
     val firstName: String = "",

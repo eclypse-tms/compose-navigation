@@ -2,6 +2,7 @@ package com.example.compose.navigation.ui.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,19 +63,26 @@ import com.example.compose.navigation.ui.list.MovieListProviderImpl
 import com.example.compose.navigation.ui.producer.Producer
 import com.example.compose.navigation.ui.theme.NavyBlue
 import com.example.compose.navigation.ui.theme.WayfinderTheme
+import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailScreen(viewModel: MovieDetailViewModel,
                       onDismissScreen: () -> Unit,
-                      onAddNewActor: () -> Unit,
-                      onAddNewProducer: () -> Unit) {
+                      onAddOrEditActor: () -> Unit,
+                      onAddOrEditProducer: () -> Unit) {
 
+    val focusManager = LocalFocusManager.current
     val movieDetails: MovieDetailViewState by viewModel.movieDetailViewStateFlow.collectAsState()
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = {
+            TopAppBar(modifier = Modifier.pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            },
+                title = {
                     Text(text = "Movie Details")
                 },
                     navigationIcon = {
@@ -84,12 +94,23 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
         Column(modifier = Modifier
             .padding(innerPadding)
             .consumeWindowInsets(innerPadding)
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
         ) {
 
             MovieDetailsContent(movieDetails = movieDetails,
                 onDismissScreen = onDismissScreen,
-                onAddNewActor = onAddNewActor,
-                onAddNewProducer = onAddNewProducer,
+                onAddOrEditActor = {
+                    viewModel.onReceive(Intent.AddOrEditActor(it))
+                    onAddOrEditActor()
+                },
+                onAddOrEditProducer = {
+                    viewModel.onReceive(Intent.AddOrEditProducer(it))
+                    onAddOrEditProducer()
+                },
                 modifier = Modifier.weight(1f))
 
             // Spacer(modifier = Modifier.height(32.dp))
@@ -110,8 +131,8 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
 fun MovieDetailsContent(movieDetails: MovieDetailViewState,
                         modifier: Modifier = Modifier,
                         onDismissScreen: () -> Unit,
-                        onAddNewActor: () -> Unit,
-                        onAddNewProducer: () -> Unit) {
+                        onAddOrEditActor: (Actor?) -> Unit,
+                        onAddOrEditProducer: (Producer?) -> Unit) {
 
     var expanded by remember { mutableStateOf(false) }
     var currentSelectedGenre by remember { mutableStateOf(movieDetails.genre) }
@@ -248,7 +269,10 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
             userScrollEnabled = false
         ) {
             itemsIndexed(movieDetails.actors) { _, eachActor ->
-                ListItem(headlineContent = {
+                ListItem(modifier = Modifier.clickable {
+                    onAddOrEditActor(eachActor)
+                },
+                    headlineContent = {
                     Text(text = eachActor.displayName())
                 })
                 HorizontalDivider()
@@ -256,7 +280,7 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
         }
 
         ListItem(modifier = Modifier.clickable {
-            onAddNewActor()
+            onAddOrEditActor(null)
         },
             headlineContent = {
                 Row {
@@ -279,7 +303,10 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
         ) {
             itemsIndexed(movieDetails.producers) { _, eachProducer ->
 
-                ListItem(headlineContent = {
+                ListItem(modifier = Modifier.clickable {
+                    onAddOrEditProducer(eachProducer)
+                },
+                    headlineContent = {
                     Text(text = eachProducer.displayName())
                 })
                 HorizontalDivider()
@@ -287,7 +314,7 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
         }
 
         ListItem(modifier = Modifier.clickable {
-            onAddNewProducer()
+            onAddOrEditProducer(null)
         },
             headlineContent = {
                 Row {
@@ -355,6 +382,7 @@ fun MovieDetailScreenPreview() {
     )
 
     val previewViewModel = MovieDetailViewModel(
+        couroutineContext = Dispatchers.Main,
         savedStateHandle = SavedStateHandle(),
         movieListProvider = MovieListProviderImpl(MovieGenerator())
     )
@@ -364,7 +392,7 @@ fun MovieDetailScreenPreview() {
     WayfinderTheme {
         MovieDetailScreen(viewModel = previewViewModel,
             onDismissScreen = {},
-            onAddNewProducer = {},
-            onAddNewActor = {})
+            onAddOrEditProducer = {},
+            onAddOrEditActor = {})
     }
 }

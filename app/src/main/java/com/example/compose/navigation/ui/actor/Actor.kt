@@ -1,15 +1,23 @@
 package com.example.compose.navigation.ui.actor
 
+import com.example.compose.navigation.ui.detail.AddNewActorViewState
+
 data class Actor(val firstName: String,
                  val lastName: String,
                  val dob: Int? = null) {
-    constructor() : this("", "")
 
     fun displayName(): String {
-        if (dob != null) {
-            return "$firstName $lastName - $dob"
+        return if (dob != null) {
+            "$firstName $lastName - $dob"
         } else {
-            return "$firstName $lastName"
+            "$firstName $lastName"
         }
+    }
+
+    fun toAddNewActorViewState(): AddNewActorViewState {
+        return AddNewActorViewState(firstName = firstName,
+            lastName = lastName,
+            dob = dob?.toString() ?: ""
+        )
     }
 }

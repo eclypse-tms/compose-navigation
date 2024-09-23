@@ -2,15 +2,19 @@ package com.example.compose.navigation.ui.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.example.compose.navigation.ui.list.Movie
+import androidx.lifecycle.viewModelScope
+import com.example.compose.navigation.di.ViewModelCoroutineContext
 import com.example.compose.navigation.ui.list.MovieListProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
+    @ViewModelCoroutineContext private val couroutineContext: CoroutineContext,
     private val savedStateHandle: SavedStateHandle,
     private val movieListProvider: MovieListProvider
 ): ViewModel() {
@@ -31,7 +35,7 @@ class MovieDetailViewModel @Inject constructor(
         }
     }
 
-    fun onReceive(intent: Intent) {
+    fun onReceive(intent: Intent) = viewModelScope.launch(couroutineContext) {
         when (intent) {
             is Intent.InitialState -> {
                 val initialState = MovieDetailViewState(
@@ -45,7 +49,13 @@ class MovieDetailViewModel @Inject constructor(
                 )
                 _movieListViewState.value = initialState
             }
-            is Intent.InsertNewActor -> {
+            is Intent.AddOrEditActor -> {
+                val currentState = _movieListViewState.value
+                val newState = currentState.copy(addNewActorViewState = intent.actor?.toAddNewActorViewState() ?: AddNewActorViewState())
+                _movieListViewState.value = newState
+            }
+
+            is Intent.AddOrEditProducer -> {
 
             }
 
