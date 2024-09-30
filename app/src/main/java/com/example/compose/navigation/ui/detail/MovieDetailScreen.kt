@@ -103,7 +103,6 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
         ) {
 
             MovieDetailsContent(movieDetails = movieDetails,
-                onDismissScreen = onDismissScreen,
                 onAddOrEditActor = {
                     viewModel.onReceive(Intent.AddOrEditActor(it))
                     onAddOrEditActor()
@@ -112,6 +111,21 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
                     viewModel.onReceive(Intent.AddOrEditProducer(it))
                     onAddOrEditProducer(it)
                 },
+                onGenreChange = {
+                    viewModel.onReceive(Intent.GenreChanged(it))
+                },
+                onTitleChange = {
+                    viewModel.onReceive(Intent.TitleChanged(it))
+                },
+                onReleaseDateChange = {
+                    viewModel.onReceive(Intent.ReleaseDateChanged(it))
+                },
+                onDirectorFirstNameChange = {
+                    viewModel.onReceive(Intent.DirectorFirstNameChanged(it))
+                },
+                onDirectorLastNameChange = {
+                    viewModel.onReceive(Intent.DirectorLastNameChanged(it))
+                },
                 modifier = Modifier.weight(1f))
 
             // Spacer(modifier = Modifier.height(32.dp))
@@ -119,6 +133,7 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
             SaveAndCancelSection(
                 onSaveMovie = {
                     viewModel.onReceive(Intent.SaveMovie)
+                    onDismissScreen()
                 },
                 onDismissScreen = onDismissScreen
             )
@@ -131,7 +146,11 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
 @Composable
 fun MovieDetailsContent(movieDetails: MovieDetailViewState,
                         modifier: Modifier = Modifier,
-                        onDismissScreen: () -> Unit,
+                        onTitleChange: (String) -> Unit,
+                        onReleaseDateChange: (String) -> Unit,
+                        onGenreChange: (String) -> Unit,
+                        onDirectorFirstNameChange: (String) -> Unit,
+                        onDirectorLastNameChange: (String) -> Unit,
                         onAddOrEditActor: (Actor?) -> Unit,
                         onAddOrEditProducer: (Producer?) -> Unit) {
 
@@ -154,7 +173,7 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
             },
             value = movieDetails.title,
             onValueChange = {
-
+                onTitleChange(it)
             })
 
         // release date
@@ -168,7 +187,7 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
             },
             value = movieReleaseDate,
             onValueChange = {
-
+                onReleaseDateChange(it)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
@@ -189,8 +208,9 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
                     .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                     .fillMaxWidth(),
                 value = currentSelectedGenre,
-                onValueChange = {},
-                readOnly = true,
+                onValueChange = {
+                    onGenreChange(it)
+                },
                 singleLine = true,
                 placeholder = {
                     Text("Genre")
@@ -237,7 +257,7 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
                 },
                 value = movieDetails.director.firstName,
                 onValueChange = {
-
+                    onDirectorFirstNameChange(it)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -254,7 +274,7 @@ fun MovieDetailsContent(movieDetails: MovieDetailViewState,
                 },
                 value = movieDetails.director.lastName,
                 onValueChange = {
-
+                    onDirectorLastNameChange(it)
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text

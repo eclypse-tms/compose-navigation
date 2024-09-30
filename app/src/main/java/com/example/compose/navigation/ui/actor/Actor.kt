@@ -18,7 +18,7 @@ data class Actor(val firstName: String,
         }
     }
 
-    fun toAddNewActorViewState(): ActorDetailViewState {
+    fun toViewState(): ActorDetailViewState {
         return ActorDetailViewState(firstName = firstName,
             lastName = lastName,
             dob = dob?.toString() ?: ""

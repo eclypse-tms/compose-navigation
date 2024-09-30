@@ -6,13 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.compose.navigation.di.ViewModelCoroutineContext
 import com.example.compose.navigation.ui.list.MovieListProvider
 import com.example.compose.navigation.ui.actor.ActorDetailViewState
+import com.example.compose.navigation.ui.director.Director
 import com.example.compose.navigation.ui.producer.MovieDetailViewState
 import com.example.compose.navigation.ui.producer.Producer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,11 +25,11 @@ class MovieDetailViewModel @Inject constructor(
     private val movieListProvider: MovieListProvider
 ): ViewModel() {
     //region View State
-    private val _movieListViewState: MutableStateFlow<MovieDetailViewState> = MutableStateFlow(
+    private val _movieDetailViewState: MutableStateFlow<MovieDetailViewState> = MutableStateFlow(
         MovieDetailViewState()
     )
     val movieDetailViewStateFlow: StateFlow<MovieDetailViewState>
-        get() = _movieListViewState
+        get() = _movieDetailViewState
     //endregion
 
     //region flows
@@ -68,28 +68,73 @@ class MovieDetailViewModel @Inject constructor(
                         actors = intent.movie.actors,
                         producers = intent.movie.producers
                     )
-                    _movieListViewState.value = initialState
+                    _movieDetailViewState.value = initialState
                 }
             }
 
+            is Intent.TitleChanged -> {
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(title = intent.title)
+                _movieDetailViewState.value = newState
+            }
+
+            is Intent.GenreChanged -> {
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(genre = intent.genre)
+                _movieDetailViewState.value = newState
+            }
+
+            is Intent.ReleaseDateChanged -> {
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(yearReleased = intent.releaseDate)
+                _movieDetailViewState.value = newState
+            }
+
+            is Intent.DirectorFirstNameChanged -> {
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(director = Director(firstName = intent.firstName, lastName = currentState.director.lastName))
+                _movieDetailViewState.value = newState
+            }
+
+            is Intent.DirectorLastNameChanged -> {
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(director = Director(firstName = currentState.director.firstName, lastName = intent.lastName))
+                _movieDetailViewState.value = newState
+            }
+
+            is Intent.ActorInfoChanged -> {
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(actorDetailViewState = intent.actor)
+                _movieDetailViewState.value = newState
+            }
+
             is Intent.AddOrEditActor -> {
-                val currentState = _movieListViewState.value
-                val newState = currentState.copy(actorDetailViewState = intent.actor?.toAddNewActorViewState() ?: ActorDetailViewState())
-                _movieListViewState.value = newState
+                val currentState = _movieDetailViewState.value
+                val newState = currentState.copy(actorDetailViewState = intent.actor?.toViewState() ?: ActorDetailViewState())
+                _movieDetailViewState.value = newState
+            }
+
+            is Intent.SaveActor -> {
+                val currentState = _movieDetailViewState.value
+                val currentActorsList = currentState.actors.toMutableList()
+                currentActorsList.add(currentState.actorDetailViewState.toActor())
+                val newState = currentState.copy(actors = currentActorsList, actorDetailViewState = ActorDetailViewState())
+                _movieDetailViewState.value = newState
             }
 
             is Intent.AddOrEditProducer -> {
                 if (intent.producer != null) {
-                    val currentState = _movieListViewState.value
+                    val currentState = _movieDetailViewState.value
                     val currentProducersList = currentState.producers.toMutableList()
                     currentProducersList.add(intent.producer)
                     val newState = currentState.copy(producers = currentProducersList)
-                    _movieListViewState.value = newState
+                    _movieDetailViewState.value = newState
                 }
             }
 
             is Intent.SaveMovie -> {
-
+                val currentState = _movieDetailViewState.value
+                movieListProvider.addOrUpdate(currentState.toMovie())
             }
         }
     }

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
+import com.example.compose.navigation.ui.detail.Intent
 import com.example.compose.navigation.ui.detail.MovieDetailViewModel
 import com.example.compose.navigation.ui.list.MovieGenerator
 import com.example.compose.navigation.ui.list.MovieListProviderImpl
@@ -58,7 +59,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
                 },
                 value = currentMovieDetail.actorDetailViewState.firstName,
                 onValueChange = {
-
+                    viewModel.onReceive(Intent.ActorInfoChanged(currentMovieDetail.actorDetailViewState.copy(firstName = it)))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -72,7 +73,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
                 },
                 value = currentMovieDetail.actorDetailViewState.lastName,
                 onValueChange = {
-
+                    viewModel.onReceive(Intent.ActorInfoChanged(currentMovieDetail.actorDetailViewState.copy(lastName = it)))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -85,7 +86,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
                 },
                 value = currentMovieDetail.actorDetailViewState.dob,
                 onValueChange = {
-
+                    viewModel.onReceive(Intent.ActorInfoChanged(currentMovieDetail.actorDetailViewState.copy(dob = it)))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
@@ -94,7 +95,8 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
 
             Button(modifier = Modifier.widthIn(min = 150.dp),
                 onClick = {
-
+                    viewModel.onReceive(Intent.SaveActor)
+                    onDismissScreen()
             }) {
                 Text(text = "Save")
             }

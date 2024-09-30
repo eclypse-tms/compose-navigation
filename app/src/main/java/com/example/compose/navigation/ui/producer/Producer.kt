@@ -6,8 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
-data class Producer(
-                 val firstName: String,
+data class Producer(val firstName: String,
                  val lastName: String,
                  val isExecutive: Boolean = false): Parcelable {
     fun displayName(): String {
