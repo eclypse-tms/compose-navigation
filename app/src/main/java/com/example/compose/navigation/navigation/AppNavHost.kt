@@ -62,8 +62,13 @@ fun AppNavHost(
                     }
                 }
                 */
-
                 val movieDetailViewModel = navBackStackEntry.scopedViewModel<MovieDetailViewModel>(navController)
+
+
+                val newlyCreatedProducer = navBackStackEntry.savedStateHandle.get<Producer>("producer")
+                if (newlyCreatedProducer != null) {
+                    movieDetailViewModel.producersFlow.tryEmit(newlyCreatedProducer)
+                }
 
                 // region MovieDetail
                 MovieDetailScreen(
@@ -109,6 +114,13 @@ fun AppNavHost(
 
             AddProducerScreen(
                 viewModel = producerDetailViewModel,
+                onSaveProducer = { producer ->
+                    val previousBackStackEntry = navController.previousBackStackEntry
+                    if (previousBackStackEntry != null) {
+                        previousBackStackEntry.savedStateHandle["producer"] = producer
+                    }
+                    navController.popBackStack()
+                },
                 onDismissScreen = { navController.popBackStack() },
             )
         }
