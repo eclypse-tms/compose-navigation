@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
-import com.example.compose.navigation.navigation.AppDestinations
+import com.example.compose.navigation.navigation.AppDestination
 import com.example.compose.navigation.navigation.AppNavHost
 import com.example.compose.navigation.ui.theme.WayfinderTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
                 Surface {
                     AppNavHost(
                         navController = rememberNavController(),
-                        startDestination = AppDestinations.MovieList
+                        startDestination = AppDestination.MovieList
                     )
                 }
             }

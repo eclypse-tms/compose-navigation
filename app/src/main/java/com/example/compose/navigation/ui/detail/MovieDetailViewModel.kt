@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.compose.navigation.di.ViewModelCoroutineContext
 import com.example.compose.navigation.ui.list.MovieListProvider
+import com.example.compose.navigation.ui.actor.ActorDetailViewState
+import com.example.compose.navigation.ui.producer.MovieDetailViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +53,7 @@ class MovieDetailViewModel @Inject constructor(
             }
             is Intent.AddOrEditActor -> {
                 val currentState = _movieListViewState.value
-                val newState = currentState.copy(addNewActorViewState = intent.actor?.toAddNewActorViewState() ?: AddNewActorViewState())
+                val newState = currentState.copy(actorDetailViewState = intent.actor?.toAddNewActorViewState() ?: ActorDetailViewState())
                 _movieListViewState.value = newState
             }
 
@@ -64,9 +66,7 @@ class MovieDetailViewModel @Inject constructor(
             }
 
             is Intent.SetProducer -> {
-                val currentState = _movieListViewState.value
-                val newProducerViewState = currentState.addNewProducerViewState.copy(isExecutive = intent.isExecutive)
-                _movieListViewState.value = currentState.copy(addNewProducerViewState = newProducerViewState)
+
             }
         }
     }

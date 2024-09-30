@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,22 +25,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
-import com.example.compose.navigation.ui.detail.Intent
-import com.example.compose.navigation.ui.detail.MovieDetailViewModel
-import com.example.compose.navigation.ui.list.MovieGenerator
-import com.example.compose.navigation.ui.list.MovieListProvider
-import com.example.compose.navigation.ui.list.MovieListProviderImpl
 import com.example.compose.navigation.ui.theme.WayfinderTheme
 import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddProducerScreen(viewModel: MovieDetailViewModel,
+fun AddProducerScreen(viewModel: ProducerDetailViewModel,
                       onDismissScreen: () -> Unit) {
 
-    val currentMovieDetail by viewModel.movieDetailViewStateFlow.collectAsState()
+    val currentProducerDetail by viewModel.producerDetailViewState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -66,9 +59,9 @@ fun AddProducerScreen(viewModel: MovieDetailViewModel,
                 placeholder = {
                     Text(text = "First Name")
                 },
-                value = currentMovieDetail.addNewActorViewState.firstName,
+                value = currentProducerDetail.firstName,
                 onValueChange = {
-
+                    viewModel.onReceive(Intent.ChangeFirstName(it))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -81,9 +74,9 @@ fun AddProducerScreen(viewModel: MovieDetailViewModel,
                 placeholder = {
                     Text(text = "Last Name")
                 },
-                value = currentMovieDetail.addNewActorViewState.lastName,
+                value = currentProducerDetail.lastName,
                 onValueChange = {
-
+                    viewModel.onReceive(Intent.ChangeLastName(it))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -97,9 +90,9 @@ fun AddProducerScreen(viewModel: MovieDetailViewModel,
                     "Executive Producer"
                 )
                 Checkbox(
-                    checked = currentMovieDetail.addNewProducerViewState.isExecutive,
+                    checked = currentProducerDetail.isExecutive,
                     onCheckedChange = {
-                        viewModel.onReceive(Intent.SetProducer(isExecutive = it))
+                        viewModel.onReceive(Intent.ChangeExecutive(it))
                     }
                 )
             }
@@ -118,10 +111,9 @@ fun AddProducerScreen(viewModel: MovieDetailViewModel,
 @Preview
 @Composable
 fun PreviewAddActorScreen() {
-    val previewViewModel = MovieDetailViewModel(
+    val previewViewModel = ProducerDetailViewModel(
         couroutineContext = Dispatchers.Main,
-        savedStateHandle = SavedStateHandle(),
-        movieListProvider = MovieListProviderImpl(MovieGenerator())
+        savedStateHandle = SavedStateHandle()
     )
     WayfinderTheme {
         AddProducerScreen(viewModel = previewViewModel,

@@ -4,7 +4,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
-    kotlin("plugin.serialization") version "2.0.0"
+    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {

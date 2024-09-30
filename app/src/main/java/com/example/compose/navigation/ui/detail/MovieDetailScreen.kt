@@ -60,6 +60,7 @@ import com.example.compose.navigation.ui.director.Director
 import com.example.compose.navigation.ui.list.Movie
 import com.example.compose.navigation.ui.list.MovieGenerator
 import com.example.compose.navigation.ui.list.MovieListProviderImpl
+import com.example.compose.navigation.ui.producer.MovieDetailViewState
 import com.example.compose.navigation.ui.producer.Producer
 import com.example.compose.navigation.ui.theme.NavyBlue
 import com.example.compose.navigation.ui.theme.WayfinderTheme
@@ -70,7 +71,7 @@ import kotlinx.coroutines.Dispatchers
 fun MovieDetailScreen(viewModel: MovieDetailViewModel,
                       onDismissScreen: () -> Unit,
                       onAddOrEditActor: () -> Unit,
-                      onAddOrEditProducer: () -> Unit) {
+                      onAddOrEditProducer: (Producer?) -> Unit) {
 
     val focusManager = LocalFocusManager.current
     val movieDetails: MovieDetailViewState by viewModel.movieDetailViewStateFlow.collectAsState()
@@ -109,7 +110,7 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
                 },
                 onAddOrEditProducer = {
                     viewModel.onReceive(Intent.AddOrEditProducer(it))
-                    onAddOrEditProducer()
+                    onAddOrEditProducer(it)
                 },
                 modifier = Modifier.weight(1f))
 
@@ -375,9 +376,9 @@ fun MovieDetailScreenPreview() {
             Actor(firstName = "Al", lastName = "Pacino", dob = 1948)
         ),
         producers = listOf(
-            Producer(firstName = "Albert", lastName = "Ruddy"),
-            Producer(firstName = "Robert", lastName = "Evans"),
-            Producer(firstName = "Bill", lastName = "Norman"),
+            Producer(firstName = "Albert", lastName = "Ruddy", isExecutive = true),
+            Producer(firstName = "Robert", lastName = "Evans", isExecutive = false),
+            Producer(firstName = "Bill", lastName = "Norman", isExecutive = false),
         )
     )
 

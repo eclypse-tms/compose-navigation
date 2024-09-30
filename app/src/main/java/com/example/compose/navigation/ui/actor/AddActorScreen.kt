@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import com.example.compose.navigation.ui.detail.MovieDetailViewModel
 import com.example.compose.navigation.ui.list.MovieGenerator
@@ -57,7 +56,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
                 placeholder = {
                     Text(text = "First Name")
                 },
-                value = currentMovieDetail.addNewActorViewState.firstName,
+                value = currentMovieDetail.actorDetailViewState.firstName,
                 onValueChange = {
 
                 },
@@ -71,7 +70,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
                 placeholder = {
                     Text(text = "Last Name")
                 },
-                value = currentMovieDetail.addNewActorViewState.lastName,
+                value = currentMovieDetail.actorDetailViewState.lastName,
                 onValueChange = {
 
                 },
@@ -84,7 +83,7 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
                 placeholder = {
                     Text(text = "Date of Birth")
                 },
-                value = currentMovieDetail.addNewActorViewState.dob,
+                value = currentMovieDetail.actorDetailViewState.dob,
                 onValueChange = {
 
                 },
