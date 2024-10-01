@@ -51,7 +51,7 @@ fun MovieListScreen(viewModel: MovieListViewModel,
                     headlineContent = {
                     Text(text = movie.title)
                 },
-                    shadowElevation = 4.dp)
+                    shadowElevation = 2.dp)
             }
         }
     }

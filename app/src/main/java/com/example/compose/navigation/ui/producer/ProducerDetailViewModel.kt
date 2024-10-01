@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.compose.navigation.di.ViewModelCoroutineContext
-import com.example.compose.navigation.ui.detail.ProducerDetailViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +34,7 @@ class ProducerDetailViewModel @Inject constructor(
             is Intent.InitialState -> {
                 if (intent.producer != null) {
                     val initialState = ProducerDetailViewState(
+                        id = intent.producer.id,
                         firstName = intent.producer.firstName,
                         lastName = intent.producer.lastName,
                         isExecutive = intent.producer.isExecutive,
@@ -61,7 +61,7 @@ class ProducerDetailViewModel @Inject constructor(
             }
 
             is Intent.SaveProducer -> {
-                // not implemented
+                // nothing to do
             }
         }
     }

@@ -7,7 +7,6 @@ import com.example.compose.navigation.di.ViewModelCoroutineContext
 import com.example.compose.navigation.ui.list.MovieListProvider
 import com.example.compose.navigation.ui.actor.ActorDetailViewState
 import com.example.compose.navigation.ui.director.Director
-import com.example.compose.navigation.ui.producer.MovieDetailViewState
 import com.example.compose.navigation.ui.producer.Producer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -117,6 +116,7 @@ class MovieDetailViewModel @Inject constructor(
             is Intent.SaveActor -> {
                 val currentState = _movieDetailViewState.value
                 val currentActorsList = currentState.actors.toMutableList()
+                currentActorsList.removeIf { it.id == currentState.actorDetailViewState.id }
                 currentActorsList.add(currentState.actorDetailViewState.toActor())
                 val newState = currentState.copy(actors = currentActorsList, actorDetailViewState = ActorDetailViewState())
                 _movieDetailViewState.value = newState
@@ -126,6 +126,7 @@ class MovieDetailViewModel @Inject constructor(
                 if (intent.producer != null) {
                     val currentState = _movieDetailViewState.value
                     val currentProducersList = currentState.producers.toMutableList()
+                    currentProducersList.removeIf { it.id == intent.producer.id }
                     currentProducersList.add(intent.producer)
                     val newState = currentState.copy(producers = currentProducersList)
                     _movieDetailViewState.value = newState

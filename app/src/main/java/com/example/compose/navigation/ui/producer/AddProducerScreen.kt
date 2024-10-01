@@ -100,11 +100,7 @@ fun AddProducerScreen(viewModel: ProducerDetailViewModel,
 
             Button(modifier = Modifier.widthIn(min = 150.dp),
                 onClick = {
-                    onSaveProducer(Producer(
-                        firstName = currentProducerDetail.firstName,
-                        lastName = currentProducerDetail.lastName,
-                        isExecutive = currentProducerDetail.isExecutive
-                    ))
+                    onSaveProducer(currentProducerDetail.toProducer())
             }) {
                 Text(text = "Save")
             }

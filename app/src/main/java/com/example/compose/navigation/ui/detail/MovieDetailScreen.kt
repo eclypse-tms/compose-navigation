@@ -60,7 +60,6 @@ import com.example.compose.navigation.ui.director.Director
 import com.example.compose.navigation.ui.list.Movie
 import com.example.compose.navigation.ui.list.MovieGenerator
 import com.example.compose.navigation.ui.list.MovieListProviderImpl
-import com.example.compose.navigation.ui.producer.MovieDetailViewState
 import com.example.compose.navigation.ui.producer.Producer
 import com.example.compose.navigation.ui.theme.NavyBlue
 import com.example.compose.navigation.ui.theme.WayfinderTheme
@@ -108,7 +107,6 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
                     onAddOrEditActor()
                 },
                 onAddOrEditProducer = {
-                    viewModel.onReceive(Intent.AddOrEditProducer(it))
                     onAddOrEditProducer(it)
                 },
                 onGenreChange = {

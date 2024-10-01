@@ -17,7 +17,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Drama,
                 director = Director("Frank", "Darabont"),
                 actors = listOf(Actor("Tim", "Robbins"), Actor("Morgan", "Freeman")),
-                producers = listOf(Producer("Niki", "Marvin", isExecutive = true))
+                producers = listOf(Producer("Niki", "Marvin"))
             ),
             Movie(
                 id = "2",
@@ -26,7 +26,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Crime,
                 director = Director("Francis Ford", "Coppola"),
                 actors = listOf(Actor("Marlon", "Brando"), Actor("Al", "Pacino")),
-                producers = listOf(Producer("Albert", "Ruddy", isExecutive = true))
+                producers = listOf(Producer("Albert", "Ruddy"))
             ),
             Movie(
                 id = "3",
@@ -35,7 +35,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Action,
                 director = Director("Christopher", "Nolan"),
                 actors = listOf(Actor("Christian", "Bale"), Actor("Heath", "Ledger")),
-                producers = listOf(Producer("Emma", "Thomas", isExecutive = true))
+                producers = listOf(Producer("Emma", "Thomas"))
             )
         )
     }
@@ -49,7 +49,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Drama,
                 director = Director("Frank", "Darabont"),
                 actors = listOf(Actor("Tim", "Robbins"), Actor("Morgan", "Freeman")),
-                producers = listOf(Producer("Niki", "Marvin", isExecutive = true))
+                producers = listOf(Producer("Niki", "Marvin"))
             ),
             Movie(
                 id = "2",
@@ -58,7 +58,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Crime,
                 director = Director("Francis Ford", "Coppola"),
                 actors = listOf(Actor("Marlon", "Brando"), Actor("Al", "Pacino")),
-                producers = listOf(Producer("Albert", "Ruddy", isExecutive = true))
+                producers = listOf(Producer("Albert", "Ruddy"))
             ),
             Movie(
                 id = "3",
@@ -67,7 +67,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Action,
                 director = Director("Christopher", "Nolan"),
                 actors = listOf(Actor("Christian", "Bale"), Actor("Heath", "Ledger")),
-                producers = listOf(Producer("Emma", "Thomas", isExecutive = true))
+                producers = listOf(Producer("Emma", "Thomas"))
             ),
             Movie(
                 id = "4",
@@ -76,7 +76,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Crime,
                 director = Director("Francis Ford", "Coppola"),
                 actors = listOf(Actor("Al", "Pacino"), Actor("Robert", "De Niro")),
-                producers = listOf(Producer("Francis Ford", "Coppola", isExecutive = true))
+                producers = listOf(Producer("Francis Ford", "Coppola"))
             ),
             Movie(
                 id = "5",
@@ -85,7 +85,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Adventure,
                 director = Director("Peter", "Jackson"),
                 actors = listOf(Actor("Elijah", "Wood"), Actor("Viggo", "Mortensen")),
-                producers = listOf(Producer("Barrie M.", "Osborne", isExecutive = true))
+                producers = listOf(Producer("Barrie M.", "Osborne"))
             ),
             Movie(
                 id = "6",
@@ -94,7 +94,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Crime,
                 director = Director("Quentin", "Tarantino"),
                 actors = listOf(Actor("John", "Travolta"), Actor("Uma", "Thurman")),
-                producers = listOf(Producer("Lawrence", "Bender", isExecutive = true))
+                producers = listOf(Producer("Lawrence", "Bender"))
             ),
             Movie(
                 id = "7",
@@ -103,7 +103,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Biography,
                 director = Director("Steven", "Spielberg"),
                 actors = listOf(Actor("Liam", "Neeson"), Actor("Ben", "Kingsley")),
-                producers = listOf(Producer("Steven", "Spielberg", isExecutive = true))
+                producers = listOf(Producer("Steven", "Spielberg"))
             ),
             Movie(
                 id = "8",
@@ -112,7 +112,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Adventure,
                 director = Director("Peter", "Jackson"),
                 actors = listOf(Actor("Elijah", "Wood"), Actor("Ian", "McKellen")),
-                producers = listOf(Producer("Barrie M.", "Osborne", isExecutive = true))
+                producers = listOf(Producer("Barrie M.", "Osborne"))
             ),
             Movie(
                 id = "9",
@@ -121,7 +121,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Drama,
                 director = Director("Robert", "Zemeckis"),
                 actors = listOf(Actor("Tom", "Hanks"), Actor("Robin", "Wright")),
-                producers = listOf(Producer("Wendy", "Finerman", isExecutive = true))
+                producers = listOf(Producer("Wendy", "Finerman"))
             ),
             Movie(
                 id = "10",
@@ -130,7 +130,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Action,
                 director = Director("Christopher", "Nolan"),
                 actors = listOf(Actor("Leonardo", "DiCaprio"), Actor("Joseph", "Gordon-Levitt")),
-                producers = listOf(Producer("Emma", "Thomas", isExecutive = true))
+                producers = listOf(Producer("Emma", "Thomas"))
             ),
             Movie(id = "11",
                 title = "The Lord of the Rings: The Two Towers",
@@ -138,7 +138,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Adventure,
                 director = Director("Peter", "Jackson"),
                 actors = listOf(Actor("Elijah", "Wood"), Actor("Ian", "McKellen")),
-                producers = listOf(Producer("Barrie M.", "Osborne", isExecutive = true))
+                producers = listOf(Producer("Barrie M.", "Osborne"))
             ),
             Movie(id = "12",
                 title = "Star Wars: Episode V - The Empire Strikes Back",
@@ -146,7 +146,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Action,
                 director = Director("Irvin", "Kershner"),
                 actors = listOf(Actor("Mark", "Hamill"), Actor("Harrison", "Ford")),
-                producers = listOf(Producer("Gary", "Kurtz", isExecutive = true))
+                producers = listOf(Producer("Gary", "Kurtz"))
             ),
             Movie(id = "13",
                 title = "Fight Club",
@@ -154,7 +154,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Drama,
                 director = Director("David", "Fincher"),
                 actors = listOf(Actor("Brad", "Pitt"), Actor("Edward", "Norton")),
-                producers = listOf(Producer("Art", "Linson", isExecutive = true))
+                producers = listOf(Producer("Art", "Linson"))
             ),
             Movie(id = "14",
                 title = "The Good, the Bad and the Ugly",
@@ -162,7 +162,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Western,
                 director = Director("Sergio", "Leone"),
                 actors = listOf(Actor("Clint", "Eastwood"), Actor("Eli", "Wallach")),
-                producers = listOf(Producer("Alberto", "Grimaldi", isExecutive = true))
+                producers = listOf(Producer("Alberto", "Grimaldi"))
             ),
             Movie(id = "15",
                 title = "Se7en",
@@ -170,7 +170,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Crime,
                 director = Director("David", "Fincher"),
                 actors = listOf(Actor("Morgan", "Freeman"), Actor("Brad", "Pitt")),
-                producers = listOf(Producer("Arnold", "Kopelson", isExecutive = true))
+                producers = listOf(Producer("Arnold", "Kopelson"))
             ),
             Movie(id = "16",
                 title = "Interstellar",
@@ -178,7 +178,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Adventure,
                 director = Director("Christopher", "Nolan"),
                 actors = listOf(Actor("Matthew", "McConaughey"), Actor("Anne", "Hathaway")),
-                producers = listOf(Producer("Emma", "Thomas", isExecutive = true))
+                producers = listOf(Producer("Emma", "Thomas"))
             ),
             Movie(id = "17",
                 title = "Good Fellas",
@@ -186,7 +186,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Biography,
                 director = Director("Martin", "Scorsese"),
                 actors = listOf(Actor("Robert", "De Niro"), Actor("Ray", "Liotta")),
-                producers = listOf(Producer("Irwin", "Winkler", isExecutive = true))
+                producers = listOf(Producer("Irwin", "Winkler"))
             ),
             Movie(
                 id = "18",
@@ -195,7 +195,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Sci_Fi,
                 director = Director("Lana", "Wachowski"),
                 actors = listOf(Actor("Keanu", "Reeves"), Actor("Carrie-Anne", "Moss")),
-                producers = listOf(Producer("Joel", "Silver", isExecutive = true))
+                producers = listOf(Producer("Joel", "Silver"))
                 ),
             Movie(
                 id = "19",
@@ -204,7 +204,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Sci_Fi,
                 director = Director("Lana", "Wachowski"),
                 actors = listOf(Actor("Keanu", "Reeves"), Actor("Carrie-Anne", "Moss")),
-                producers = listOf(Producer("Joel", "Silver", isExecutive = true))
+                producers = listOf(Producer("Joel", "Silver"))
             ),
             Movie(
                 id = "20",
@@ -213,7 +213,7 @@ class MovieGenerator @Inject constructor() {
                 genre = MovieGenre.Sci_Fi,
                 director = Director("Lana", "Wachowski"),
                 actors = listOf(Actor("Keanu", "Reeves"), Actor("Carrie-Anne", "Moss")),
-                producers = listOf(Producer("Joel", "Silver", isExecutive = true))
+                producers = listOf(Producer("Joel", "Silver"))
             )
         )
     }
