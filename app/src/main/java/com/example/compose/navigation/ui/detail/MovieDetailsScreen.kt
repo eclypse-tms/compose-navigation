@@ -59,7 +59,7 @@ import com.example.compose.navigation.ui.actor.Actor
 import com.example.compose.navigation.ui.director.Director
 import com.example.compose.navigation.ui.list.Movie
 import com.example.compose.navigation.ui.list.MovieGenerator
-import com.example.compose.navigation.ui.list.MovieListProviderImpl
+import com.example.compose.navigation.ui.list.MovieProviderImpl
 import com.example.compose.navigation.ui.producer.Producer
 import com.example.compose.navigation.ui.theme.NavyBlue
 import com.example.compose.navigation.ui.theme.WayfinderTheme
@@ -67,13 +67,13 @@ import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailScreen(viewModel: MovieDetailViewModel,
-                      onDismissScreen: () -> Unit,
-                      onAddOrEditActor: () -> Unit,
-                      onAddOrEditProducer: (Producer?) -> Unit) {
+fun MovieDetailsScreen(viewModel: MovieDetailsViewModel,
+                       onDismissScreen: () -> Unit,
+                       onAddOrEditActor: () -> Unit,
+                       onAddOrEditProducer: (Producer?) -> Unit) {
 
     val focusManager = LocalFocusManager.current
-    val movieDetails: MovieDetailViewState by viewModel.movieDetailViewStateFlow.collectAsState()
+    val movieDetails: MovieDetailsViewState by viewModel.movieDetailsViewStateFlow.collectAsState()
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -142,7 +142,7 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailsContent(movieDetails: MovieDetailViewState,
+fun MovieDetailsContent(movieDetails: MovieDetailsViewState,
                         modifier: Modifier = Modifier,
                         onTitleChange: (String) -> Unit,
                         onReleaseDateChange: (String) -> Unit,
@@ -400,16 +400,16 @@ fun MovieDetailScreenPreview() {
         )
     )
 
-    val previewViewModel = MovieDetailViewModel(
+    val previewViewModel = MovieDetailsViewModel(
         couroutineContext = Dispatchers.Main,
         savedStateHandle = SavedStateHandle(),
-        movieListProvider = MovieListProviderImpl(MovieGenerator())
+        movieProvider = MovieProviderImpl(MovieGenerator())
     )
 
     previewViewModel.onReceive(Intent.InitialState(previewMovieDetailViewState))
 
     WayfinderTheme {
-        MovieDetailScreen(viewModel = previewViewModel,
+        MovieDetailsScreen(viewModel = previewViewModel,
             onDismissScreen = {},
             onAddOrEditProducer = {},
             onAddOrEditActor = {})

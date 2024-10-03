@@ -1,6 +1,5 @@
 package com.example.compose.navigation.navigation
 
-import com.example.compose.navigation.ui.actor.Actor
 import com.example.compose.navigation.ui.producer.Producer
 import kotlinx.serialization.Serializable
 
@@ -10,14 +9,14 @@ sealed class AppDestination {
     data object MovieList: AppDestination()
 
     @Serializable
-    data object MovieDetails: AppDestination()
+    data object MovieDetailsParent: AppDestination()
 
     @Serializable
-    data class EditMovie(val movieId: String? = null): AppDestination()
+    data class MovieDetails(val movieId: String? = null): AppDestination()
 
     @Serializable
-    data class ActorDetails(val actor: Actor? = null): AppDestination()
+    data object ActorDetails: AppDestination()
 
     @Serializable
-    data class ProduceDetails(val producer: Producer? = null): AppDestination()
+    data class ProducerDetails(val producer: Producer? = null): AppDestination()
 }

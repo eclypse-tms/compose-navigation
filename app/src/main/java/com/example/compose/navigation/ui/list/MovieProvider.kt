@@ -1,7 +1,7 @@
 package com.example.compose.navigation.ui.list
 
 
-interface MovieListProvider {
+interface MovieProvider {
     fun addOrUpdate(movie: Movie)
     fun add(all: List<Movie>)
     fun remove(movie: Movie)
@@ -11,7 +11,7 @@ interface MovieListProvider {
     }
 }
 
-class MovieListProviderImpl(private val movieGenerator: MovieGenerator) : MovieListProvider {
+class MovieProviderImpl(private val movieGenerator: MovieGenerator) : MovieProvider {
 
     private val movies = mutableListOf<Movie>()
 

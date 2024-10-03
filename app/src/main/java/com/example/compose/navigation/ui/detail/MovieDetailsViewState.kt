@@ -7,7 +7,7 @@ import com.example.compose.navigation.ui.list.Movie
 import com.example.compose.navigation.ui.producer.Producer
 
 
-data class MovieDetailViewState(
+data class MovieDetailsViewState(
     val id: String = "",
     val title: String = "",
     val yearReleased: String? = null,

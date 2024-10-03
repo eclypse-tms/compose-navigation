@@ -1,8 +1,8 @@
 package com.example.compose.navigation.di
 
 import com.example.compose.navigation.ui.list.MovieGenerator
-import com.example.compose.navigation.ui.list.MovieListProvider
-import com.example.compose.navigation.ui.list.MovieListProviderImpl
+import com.example.compose.navigation.ui.list.MovieProvider
+import com.example.compose.navigation.ui.list.MovieProviderImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ object DbModule {
 
     @Provides
     @Singleton
-    fun provideMovieListProvider(movieGenerator: MovieGenerator): MovieListProvider {
-        return MovieListProviderImpl(movieGenerator = movieGenerator)
+    fun provideMovieListProvider(movieGenerator: MovieGenerator): MovieProvider {
+        return MovieProviderImpl(movieGenerator = movieGenerator)
     }
 }

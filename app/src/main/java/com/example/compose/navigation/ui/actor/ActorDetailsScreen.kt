@@ -25,18 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import com.example.compose.navigation.ui.detail.Intent
-import com.example.compose.navigation.ui.detail.MovieDetailViewModel
+import com.example.compose.navigation.ui.detail.MovieDetailsViewModel
 import com.example.compose.navigation.ui.list.MovieGenerator
-import com.example.compose.navigation.ui.list.MovieListProviderImpl
+import com.example.compose.navigation.ui.list.MovieProviderImpl
 import com.example.compose.navigation.ui.theme.WayfinderTheme
 import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddActorScreen(viewModel: MovieDetailViewModel,
-                   onDismissScreen: () -> Unit) {
+fun ActorDetailsScreen(viewModel: MovieDetailsViewModel,
+                       onDismissScreen: () -> Unit) {
 
-    val currentMovieDetail by viewModel.movieDetailViewStateFlow.collectAsState()
+    val currentMovieDetail by viewModel.movieDetailsViewStateFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -108,13 +108,13 @@ fun AddActorScreen(viewModel: MovieDetailViewModel,
 @Preview
 @Composable
 fun PreviewAddActorScreen() {
-    val previewViewModel = MovieDetailViewModel(
+    val previewViewModel = MovieDetailsViewModel(
         couroutineContext = Dispatchers.Main,
         savedStateHandle = SavedStateHandle(),
-        movieListProvider = MovieListProviderImpl(MovieGenerator())
+        movieProvider = MovieProviderImpl(MovieGenerator())
     )
     WayfinderTheme {
-        AddActorScreen(viewModel = previewViewModel,
+        ActorDetailsScreen(viewModel = previewViewModel,
             onDismissScreen = {})
     }
 }

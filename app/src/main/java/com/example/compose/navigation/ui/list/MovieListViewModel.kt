@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
-    private val movieListProvider: MovieListProvider
+    private val movieProvider: MovieProvider
 ): ViewModel() {
     //region View State
     private val _movieListViewState: MutableStateFlow<MovieListViewState> = MutableStateFlow(
@@ -19,7 +19,7 @@ class MovieListViewModel @Inject constructor(
     //endregion
 
     init {
-        onReceive(Intent.InitialState(movieListProvider.getMovies()))
+        onReceive(Intent.InitialState(movieProvider.getMovies()))
     }
 
     fun onReceive(intent: Intent) {

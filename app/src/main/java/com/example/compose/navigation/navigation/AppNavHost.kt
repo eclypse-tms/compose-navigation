@@ -12,12 +12,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.compose.navigation.ui.actor.Actor
-import com.example.compose.navigation.ui.actor.AddActorScreen
-import com.example.compose.navigation.ui.detail.MovieDetailScreen
-import com.example.compose.navigation.ui.detail.MovieDetailViewModel
+import com.example.compose.navigation.ui.actor.ActorDetailsScreen
+import com.example.compose.navigation.ui.detail.MovieDetailsScreen
+import com.example.compose.navigation.ui.detail.MovieDetailsViewModel
 import com.example.compose.navigation.ui.list.MovieListScreen
 import com.example.compose.navigation.ui.list.MovieListViewModel
-import com.example.compose.navigation.ui.producer.AddProducerScreen
+import com.example.compose.navigation.ui.producer.ProducerDetailsScreen
 import com.example.compose.navigation.ui.producer.Producer
 import com.example.compose.navigation.ui.producer.ProducerDetailViewModel
 import kotlin.reflect.typeOf
@@ -36,49 +36,36 @@ fun AppNavHost(
             val movieListViewModel = hiltViewModel<MovieListViewModel>()
 
             MovieListScreen(viewModel = movieListViewModel,
-                onMovieSelected = { currentlySelectedMovieId ->
-                    navController.navigate(route = AppDestination.EditMovie(movieId = currentlySelectedMovieId))
+                onMovieSelected = { movieId ->
+                    navController.navigate(route = AppDestination.MovieDetails(movieId = movieId))
                 },
                 onAddNewMovie = {
-                    navController.navigate(route = AppDestination.EditMovie(movieId = null))
+                    navController.navigate(route = AppDestination.MovieDetails(movieId = null))
                 }
             )
         }
 
-        navigation<AppDestination.MovieDetails>(startDestination = AppDestination.EditMovie()) {
+        navigation<AppDestination.MovieDetailsParent>(startDestination = AppDestination.MovieDetails()) {
 
-            composable<AppDestination.EditMovie> { navBackStackEntry ->
-                /*
-                val currentBackStackEntry = navController.currentBackStackEntry
-                if (currentBackStackEntry != null) {
-                    val selectedGrowStageId = currentBackStackEntry.savedStateHandle.get<GrowthStage>(GrowthStageViewModel.SELECTED_GROWTH_STAGE_KEY)
-                    if (selectedGrowStageId != null) {
-                        addNoteViewModel.selectedGrowthStageFlow.value = selectedGrowStageId
-                    }
+            composable<AppDestination.MovieDetails> { navBackStackEntry ->
 
-                    val selectedIssueType = currentBackStackEntry.savedStateHandle.get<IssueTypeAndConcernLevel>(IssueTypeViewModel.SELECTED_ISSUE_TYPE_KEY)
-                    if (selectedIssueType != null) {
-                        addNoteViewModel.selectedIssueTypeFlow.value = selectedIssueType
-                    }
-                }
-                */
-                val movieDetailViewModel = navBackStackEntry.scopedViewModel<MovieDetailViewModel>(navController)
+                val movieDetailsViewModel = navBackStackEntry.scopedViewModel<MovieDetailsViewModel>(navController)
 
 
                 val newlyCreatedProducer = navBackStackEntry.savedStateHandle.get<Producer>("producer")
                 if (newlyCreatedProducer != null) {
-                    movieDetailViewModel.producersFlow.tryEmit(newlyCreatedProducer)
+                    movieDetailsViewModel.producersFlow.tryEmit(newlyCreatedProducer)
                 }
 
                 // region MovieDetail
-                MovieDetailScreen(
-                    viewModel = movieDetailViewModel,
+                MovieDetailsScreen(
+                    viewModel = movieDetailsViewModel,
                     onDismissScreen = { navController.popBackStack() },
                     onAddOrEditProducer = {
-                        navController.navigate(route = AppDestination.ProduceDetails(producer = it))
+                        navController.navigate(route = AppDestination.ProducerDetails(producer = it))
                     },
                     onAddOrEditActor = {
-                        navController.navigate(AppDestination.ActorDetails(actor = null))
+                        navController.navigate(AppDestination.ActorDetails)
                     }
                 )
                 // endregion
@@ -92,10 +79,10 @@ fun AppNavHost(
                 )
             ) { navBackStackEntry ->
 
-                val movieDetailViewModel = navBackStackEntry.scopedViewModel<MovieDetailViewModel>(navController)
+                val movieDetailsViewModel = navBackStackEntry.scopedViewModel<MovieDetailsViewModel>(navController)
 
-                AddActorScreen(
-                    viewModel = movieDetailViewModel,
+                ActorDetailsScreen(
+                    viewModel = movieDetailsViewModel,
                     onDismissScreen = { navController.popBackStack() },
                 )
             }
@@ -103,7 +90,7 @@ fun AppNavHost(
         }
 
         // region ProducerDetail
-        composable<AppDestination.ProduceDetails>(
+        composable<AppDestination.ProducerDetails>(
             typeMap = mapOf(
                 typeOf<Producer>() to parcelableType<Producer>(),
                 typeOf<Producer?>() to parcelableType<Producer?>()
@@ -112,7 +99,7 @@ fun AppNavHost(
 
             val producerDetailViewModel = hiltViewModel<ProducerDetailViewModel>()
 
-            AddProducerScreen(
+            ProducerDetailsScreen(
                 viewModel = producerDetailViewModel,
                 onSaveProducer = { producer ->
                     val previousBackStackEntry = navController.previousBackStackEntry
@@ -131,6 +118,7 @@ fun AppNavHost(
 
 @Composable
 inline fun <reified T: ViewModel> NavBackStackEntry.scopedViewModel(navController: NavHostController): T {
+    // if the destination route doesn't have a parent create a brand new instance
     val navGraphRoute = destination.parent?.route ?: return hiltViewModel()
     val parentEntry: NavBackStackEntry = remember(key1 = this) {
         navController.getBackStackEntry(navGraphRoute)

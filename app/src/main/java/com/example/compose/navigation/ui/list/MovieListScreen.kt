@@ -62,7 +62,7 @@ fun MovieListScreen(viewModel: MovieListViewModel,
 fun PreviewMovieListScreen() {
 
     val movieGenerator = MovieGenerator()
-    val movieListProvider = MovieListProviderImpl(movieGenerator)
+    val movieListProvider = MovieProviderImpl(movieGenerator)
     val viewModel = MovieListViewModel(movieListProvider)
 
     viewModel.onReceive(Intent.InitialState(movieGenerator.generateTop3MovieListFromImdb()))
