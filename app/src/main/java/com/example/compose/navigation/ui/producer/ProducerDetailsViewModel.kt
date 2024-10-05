@@ -12,7 +12,7 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
-class ProducerDetailViewModel @Inject constructor(
+class ProducerDetailsViewModel @Inject constructor(
     @ViewModelCoroutineContext private val couroutineContext: CoroutineContext,
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
@@ -25,7 +25,7 @@ class ProducerDetailViewModel @Inject constructor(
     //endregion
 
     init {
-        val passedProducer = savedStateHandle.get<Producer?>(key = "producer")
+        val passedProducer = savedStateHandle.get<Producer>(key = "producer")
         onReceive(Intent.InitialState(passedProducer))
     }
 

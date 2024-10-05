@@ -31,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProducerDetailsScreen(viewModel: ProducerDetailViewModel,
+fun ProducerDetailsScreen(viewModel: ProducerDetailsViewModel,
                           onSaveProducer: (Producer) -> Unit,
                           onDismissScreen: () -> Unit) {
 
@@ -112,7 +112,7 @@ fun ProducerDetailsScreen(viewModel: ProducerDetailViewModel,
 @Preview
 @Composable
 fun PreviewAddActorScreen() {
-    val previewViewModel = ProducerDetailViewModel(
+    val previewViewModel = ProducerDetailsViewModel(
         couroutineContext = Dispatchers.Main,
         savedStateHandle = SavedStateHandle()
     )

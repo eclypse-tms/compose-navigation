@@ -11,7 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.example.compose.navigation.ui.actor.Actor
 import com.example.compose.navigation.ui.actor.ActorDetailsScreen
 import com.example.compose.navigation.ui.detail.MovieDetailsScreen
 import com.example.compose.navigation.ui.detail.MovieDetailsViewModel
@@ -19,7 +18,7 @@ import com.example.compose.navigation.ui.list.MovieListScreen
 import com.example.compose.navigation.ui.list.MovieListViewModel
 import com.example.compose.navigation.ui.producer.ProducerDetailsScreen
 import com.example.compose.navigation.ui.producer.Producer
-import com.example.compose.navigation.ui.producer.ProducerDetailViewModel
+import com.example.compose.navigation.ui.producer.ProducerDetailsViewModel
 import kotlin.reflect.typeOf
 
 @Composable
@@ -52,9 +51,9 @@ fun AppNavHost(
                 val movieDetailsViewModel = navBackStackEntry.scopedViewModel<MovieDetailsViewModel>(navController)
 
 
-                val newlyCreatedProducer = navBackStackEntry.savedStateHandle.get<Producer>("producer")
-                if (newlyCreatedProducer != null) {
-                    movieDetailsViewModel.producersFlow.tryEmit(newlyCreatedProducer)
+                val selectedProducer = navBackStackEntry.savedStateHandle.get<Producer>("producer")
+                if (selectedProducer != null) {
+                    movieDetailsViewModel.producersFlow.tryEmit(selectedProducer)
                 }
 
                 // region MovieDetail
@@ -72,12 +71,7 @@ fun AppNavHost(
             }
 
             // region ActorDetail
-            composable<AppDestination.ActorDetails>(
-                typeMap = mapOf(
-                    typeOf<Actor>() to parcelableType<Actor>(),
-                    typeOf<Actor?>() to parcelableType<Actor?>(),
-                )
-            ) { navBackStackEntry ->
+            composable<AppDestination.ActorDetails>{ navBackStackEntry ->
 
                 val movieDetailsViewModel = navBackStackEntry.scopedViewModel<MovieDetailsViewModel>(navController)
 
@@ -92,15 +86,15 @@ fun AppNavHost(
         // region ProducerDetail
         composable<AppDestination.ProducerDetails>(
             typeMap = mapOf(
-                typeOf<Producer>() to parcelableType<Producer>(),
-                typeOf<Producer?>() to parcelableType<Producer?>()
+                typeOf<Producer>() to navType<Producer>(),
+                typeOf<Producer?>() to navType<Producer?>()
             )
         ) { navBackStackEntry ->
 
-            val producerDetailViewModel = hiltViewModel<ProducerDetailViewModel>()
+            val producerDetailsViewModel = hiltViewModel<ProducerDetailsViewModel>()
 
             ProducerDetailsScreen(
-                viewModel = producerDetailViewModel,
+                viewModel = producerDetailsViewModel,
                 onSaveProducer = { producer ->
                     val previousBackStackEntry = navController.previousBackStackEntry
                     if (previousBackStackEntry != null) {
