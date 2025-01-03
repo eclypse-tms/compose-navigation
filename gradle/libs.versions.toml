@@ -1,24 +1,24 @@
 [versions]
-agp = "8.5.2"
-kotlin = "2.0.0"
-coreKtx = "1.13.1"
+agp = "8.7.0"
+kotlin = "2.0.20"
+coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.6"
-activityCompose = "1.9.2"
-composeBom = "2024.09.02"
-androidx-navigation = "2.8.1"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.9.3"
+composeBom = "2024.12.01"
+androidx-navigation = "2.8.5"
 
 # hilt - compose integration
 hiltNavigationCompose = "1.2.0"
-hilt = "2.51.1"
+hilt = "2.52"
 
 # ksp (kotlin symbol processing)
 ksp = "2.0.0-1.0.24"
 
 # constraint layout for compose
-composeConstraintLayout = "1.0.1"
+composeConstraintLayout = "1.1.0"
 
 # serialization
 kotlinxSerializationJson = "1.7.1"
