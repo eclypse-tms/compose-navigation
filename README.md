@@ -16,6 +16,10 @@ Demo App Preview:
 	<img width="764.5" height="384" src="./assets/hero_image.jpg">
 </p>
 
+## More information
+This is a companion repository for the [Pass data between screens with Jetpack Compose Navigation + Hilt](https://blog.eclypse.io/pass-data-between-screens-with-jetpack-compose-navigation-hilt-947c72d7dc4e) article. Please refer to the blog for more information.
+
+
 ## Requirements
 
 | Android Studio | Ladybug |
